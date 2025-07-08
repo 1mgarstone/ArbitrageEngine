@@ -1,0 +1,153 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: hsl(0, 0%, 10%);
+    --foreground: hsl(0, 0%, 98%);
+    --card: hsl(0, 0%, 16%);
+    --card-foreground: hsl(0, 0%, 98%);
+    --popover: hsl(0, 0%, 16%);
+    --popover-foreground: hsl(0, 0%, 98%);
+    --primary: hsl(152, 100%, 42%);
+    --primary-foreground: hsl(0, 0%, 0%);
+    --secondary: hsl(0, 0%, 22%);
+    --secondary-foreground: hsl(0, 0%, 98%);
+    --muted: hsl(0, 0%, 22%);
+    --muted-foreground: hsl(0, 0%, 64%);
+    --accent: hsl(0, 0%, 22%);
+    --accent-foreground: hsl(0, 0%, 98%);
+    --destructive: hsl(0, 62%, 61%);
+    --destructive-foreground: hsl(0, 0%, 98%);
+    --border: hsl(0, 0%, 22%);
+    --input: hsl(0, 0%, 22%);
+    --ring: hsl(152, 100%, 42%);
+    --radius: 0.5rem;
+    
+    /* Trading specific colors */
+    --trading-dark: hsl(0, 0%, 10%);
+    --trading-card: hsl(0, 0%, 16%);
+    --trading-border: hsl(0, 0%, 22%);
+    --profit: hsl(152, 100%, 42%);
+    --loss: hsl(0, 62%, 61%);
+    --warning: hsl(38, 100%, 50%);
+    
+    /* Chart colors */
+    --chart-1: hsl(152, 100%, 42%);
+    --chart-2: hsl(38, 100%, 50%);
+    --chart-3: hsl(0, 62%, 61%);
+    --chart-4: hsl(221, 83%, 53%);
+    --chart-5: hsl(273, 83%, 53%);
+  }
+
+  .dark {
+    --background: hsl(0, 0%, 10%);
+    --foreground: hsl(0, 0%, 98%);
+    --card: hsl(0, 0%, 16%);
+    --card-foreground: hsl(0, 0%, 98%);
+    --popover: hsl(0, 0%, 16%);
+    --popover-foreground: hsl(0, 0%, 98%);
+    --primary: hsl(152, 100%, 42%);
+    --primary-foreground: hsl(0, 0%, 0%);
+    --secondary: hsl(0, 0%, 22%);
+    --secondary-foreground: hsl(0, 0%, 98%);
+    --muted: hsl(0, 0%, 22%);
+    --muted-foreground: hsl(0, 0%, 64%);
+    --accent: hsl(0, 0%, 22%);
+    --accent-foreground: hsl(0, 0%, 98%);
+    --destructive: hsl(0, 62%, 61%);
+    --destructive-foreground: hsl(0, 0%, 98%);
+    --border: hsl(0, 0%, 22%);
+    --input: hsl(0, 0%, 22%);
+    --ring: hsl(152, 100%, 42%);
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Inter', sans-serif;
+  }
+}
+
+@layer components {
+  .trading-dark {
+    background-color: hsl(var(--trading-dark));
+  }
+  
+  .trading-card {
+    background-color: hsl(var(--trading-card));
+  }
+  
+  .trading-border {
+    border-color: hsl(var(--trading-border));
+  }
+  
+  .text-profit {
+    color: hsl(var(--profit));
+  }
+  
+  .text-loss {
+    color: hsl(var(--loss));
+  }
+  
+  .text-warning {
+    color: hsl(var(--warning));
+  }
+  
+  .bg-profit {
+    background-color: hsl(var(--profit));
+  }
+  
+  .bg-loss {
+    background-color: hsl(var(--loss));
+  }
+  
+  .bg-warning {
+    background-color: hsl(var(--warning));
+  }
+  
+  .border-profit {
+    border-color: hsl(var(--profit));
+  }
+  
+  .slider {
+    background: linear-gradient(to right, hsl(var(--profit)) 0%, hsl(var(--profit)) var(--value, 0%), hsl(var(--muted)) var(--value, 0%), hsl(var(--muted)) 100%);
+  }
+  
+  .slider::-webkit-slider-thumb {
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: hsl(var(--profit));
+    cursor: pointer;
+    border: 2px solid hsl(var(--background));
+  }
+  
+  .slider::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: hsl(var(--profit));
+    cursor: pointer;
+    border: 2px solid hsl(var(--background));
+  }
+}
+
+@keyframes pulse-profit {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.animate-pulse-profit {
+  animation: pulse-profit 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
