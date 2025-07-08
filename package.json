@@ -1,0 +1,19 @@
+{
+  "name": "flashloan-arbitrage",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "start": "node scripts/setupRealTrading.js",
+    "dev": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "check": "node scripts/checkSystem.js"
+  },
+  "dependencies": {
+    "ethers": "^6.0.0",
+    "dotenv": "^16.0.0",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0",
+    "react-scripts": "^5.0.1"
+  }
+}
