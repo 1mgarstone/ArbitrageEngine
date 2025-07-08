@@ -1,15 +1,15 @@
 import * as ethers from 'ethers';
 
 export class BlockchainService {
-  private provider: ethers.providers.JsonRpcProvider;
-  private polygonProvider: ethers.providers.JsonRpcProvider;
+  private provider: ethers.JsonRpcProvider;
+  private polygonProvider: ethers.JsonRpcProvider;
 
   constructor() {
     const ethRpcUrl = process.env.ETHEREUM_RPC_URL || 'https://mainnet.infura.io/v3/your-project-id';
     const polygonRpcUrl = process.env.POLYGON_RPC_URL || 'https://polygon-mainnet.infura.io/v3/your-project-id';
     
-    this.provider = new ethers.providers.JsonRpcProvider(ethRpcUrl);
-    this.polygonProvider = new ethers.providers.JsonRpcProvider(polygonRpcUrl);
+    this.provider = new ethers.JsonRpcProvider(ethRpcUrl);
+    this.polygonProvider = new ethers.JsonRpcProvider(polygonRpcUrl);
   }
 
   async getEthereumGasPrice(): Promise<number> {
