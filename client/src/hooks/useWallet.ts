@@ -1,6 +1,9 @@
 import { useState, useEffect } from 'react';
 import { WalletInfo, NetworkStatus } from '../types/trading';
 import { blockchainService } from '../lib/blockchain';
+import WalletConnectProvider from '@walletconnect/web3-provider';
+import { ethers, formatEther, formatUnits } from 'ethers';
+import * as Sentry from '@sentry/browser'; // Sentry for error tracking (add to package.json)
 
 export function useWallet() {
   const [wallet, setWallet] = useState<WalletInfo>({
@@ -60,7 +63,56 @@ export function useWallet() {
       }));
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to connect wallet');
+      Sentry.captureException(err); // Log error to Sentry
       console.error('Wallet connection error:', err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const connectWalletConnect = async () => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      // 1. Create WalletConnect Provider
+      const provider = new WalletConnectProvider({
+        rpc: {
+          1: 'https://mainnet.infura.io/v3/your-project-id', // Replace with your Infura ID
+        },
+      });
+      // 2. Enable session (triggers QR Code modal)
+      await provider.enable();
+      // 3. Create ethers provider and signer
+      const ethersProvider = new ethers.BrowserProvider(provider);
+      const signer = await ethersProvider.getSigner();
+      const address = await signer.getAddress();
+      const balance = parseFloat(formatEther(await ethersProvider.getBalance(address)));
+      setWallet({
+        address,
+        balance,
+        isConnected: true,
+        network: 'ethereum',
+      });
+      // Optionally update blockchainService to use this signer
+      if (blockchainService.setExternalSigner) {
+        blockchainService.setExternalSigner(signer);
+      }
+      // Update network status
+      const feeData = await ethersProvider.getFeeData();
+      const gasPrice = feeData.gasPrice ? parseFloat(formatUnits(feeData.gasPrice, 'gwei')) : 0;
+      const blockNumber = await ethersProvider.getBlockNumber();
+      setNetworkStatus(prev => ({
+        ...prev,
+        ethereum: {
+          connected: true,
+          gasPrice,
+          blockNumber,
+        },
+      }));
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to connect with WalletConnect');
+      Sentry.captureException(err); // Log error to Sentry
+      console.error('WalletConnect error:', err);
     } finally {
       setIsLoading(false);
     }
@@ -73,6 +125,7 @@ export function useWallet() {
       const balance = await blockchainService.getBalance(wallet.address);
       setWallet(prev => ({ ...prev, balance }));
     } catch (err) {
+      Sentry.captureException(err); // Log error to Sentry
       console.error('Error refreshing balance:', err);
     }
   };
@@ -91,6 +144,7 @@ export function useWallet() {
         }
       }));
     } catch (err) {
+      Sentry.captureException(err); // Log error to Sentry
       console.error('Error updating network status:', err);
     }
   };
@@ -121,6 +175,7 @@ export function useWallet() {
     isLoading,
     error,
     connectWallet,
+    connectWalletConnect,
     refreshBalance,
     updateNetworkStatus
   };

@@ -29,7 +29,7 @@ import { useFlashLoan } from '@/hooks/useFlashLoan';
 import { useArbitrage } from '@/hooks/useArbitrage';
 
 export function TradingDashboard() {
-  const { wallet, networkStatus, connectWallet, isLoading: walletLoading } = useWallet();
+  const { wallet, networkStatus, connectWallet, connectWalletConnect, isLoading: walletLoading } = useWallet();
   const { config: flashLoanConfig, providers, updateProvider } = useFlashLoan();
   const { 
     opportunities, 
@@ -121,9 +121,23 @@ export function TradingDashboard() {
               className="bg-profit hover:bg-profit/80"
             >
               <Wallet className="mr-2 h-4 w-4" />
-              {wallet.isConnected ? formatAddress(wallet.address) : 'Connect Wallet'}
+              {wallet.isConnected ? formatAddress(wallet.address) : 'Connect Private Key'}
+            </Button>
+            <Button 
+              onClick={connectWalletConnect} 
+              disabled={walletLoading || wallet.isConnected}
+              className="bg-blue-600 hover:bg-blue-700"
+            >
+              <Wallet className="mr-2 h-4 w-4" />
+              {wallet.isConnected ? 'Wallet Connected' : 'Connect WalletConnect'}
             </Button>
           </div>
+        </div>
+
+        {/* Wallet Connection Indicator */}
+        <div className="flex items-center space-x-2">
+          <div className={`w-3 h-3 rounded-full ${wallet.isConnected ? 'bg-green-500 animate-pulse' : 'bg-gray-500'}`} title={wallet.isConnected ? 'Wallet Connected' : 'Wallet Disconnected'} />
+          <span className="text-xs text-gray-300">{wallet.isConnected ? 'Wallet Connected' : 'No Wallet'}</span>
         </div>
       </nav>
 
